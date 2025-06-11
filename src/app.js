@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/auth");
 const dashRouter = require("./routes/dashboard");
 require("dotenv").config();
+const path = require("path");
 
 server.use(
   cors({
@@ -13,6 +14,8 @@ server.use(
     credentials: true,
   })
 );
+
+server.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
 server.use(express.json());
 server.use(cookieParser());
@@ -23,10 +26,9 @@ server.use("/", dashRouter);
 connectDB()
   .then(() => {
     console.log("Connected to database successfully...");
-    server.listen(5000, () => {
-      console.log("Listining on port 5000...");
-    });
   })
   .catch((err) => {
     console.log("Database connection is not established..." + err.message);
   });
+
+module.exports = server;

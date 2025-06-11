@@ -11,7 +11,7 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User({
-      userName: username,
+      username: username,
       email: email,
       password: hashedPassword,
     });
@@ -31,12 +31,28 @@ const updateUser = async (req, res) => {
   try {
     const user = req.user;
 
-    const { ...details } = req.body;
+    const avatarUrl = req.file ? req.file.filename : null;
 
-    const updatedUser = await User.findByIdAndUpdate(user._id, details, {
-      new: true,
-      runValidators: true,
-    });
+    const { username, title, bio, location, github, linkedin } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      {
+        username,
+        title,
+        bio,
+        location,
+        github,
+        linkedin,
+        avatar: avatarUrl ? `/uploads/${avatarUrl}` : user.avatar,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    )
+      .populate("projects")
+      .populate("blogs");
 
     res.status(200).send(updatedUser);
   } catch (err) {
@@ -49,24 +65,24 @@ const loginUser = async (req, res) => {
     const { loginEmail, loginPassword } = req.body;
 
     const user = await User.findOne({
-      $or: [{ email: loginEmail }, { userName: loginEmail }],
+      $or: [{ email: loginEmail }, { username: loginEmail }],
     })
       .populate("projects")
       .populate("blogs");
 
     if (!user) {
-      throw new Error("Email/Username doesn't exists...");
+      throw new Error("Invalid Credentials...");
     }
 
     const decodedPassword = await bcrypt.compare(loginPassword, user.password);
 
     if (!decodedPassword) {
-      throw new Error("Password doesn't match...");
+      throw new Error("Invalid Credentials...");
     }
 
     const filteredUser = {
       id: user._id,
-      username: user.userName,
+      username: user.username,
       email: user.email,
       avatar: user.avatar,
       title: user.title,
