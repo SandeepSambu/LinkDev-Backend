@@ -15,6 +15,8 @@ server.use(
   })
 );
 
+server.get("/health", (req, res) => res.send("OK"));
+
 server.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
 server.use(express.json());
