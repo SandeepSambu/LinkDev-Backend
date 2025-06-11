@@ -10,7 +10,7 @@ const path = require("path");
 
 server.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://link-dev-frontend.vercel.app/",
     credentials: true,
   })
 );
