@@ -25,12 +25,4 @@ server.use(cookieParser());
 server.use("/", authRouter);
 server.use("/", dashRouter);
 
-connectDB()
-  .then(() => {
-    console.log("Connected to database successfully...");
-  })
-  .catch((err) => {
-    console.log("Database connection is not established..." + err.message);
-  });
-
 module.exports = server;
