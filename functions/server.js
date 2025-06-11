@@ -4,12 +4,22 @@ const connectDB = require("../src/config/database");
 
 let isConnected = false;
 
-module.exports.handler = async (event, context) => {
-  if (!isConnected) {
-    await connectDB();
-    isConnected = true;
+const handler = async (event, context) => {
+  try {
+    if (!isConnected) {
+      await connectDB();
+      isConnected = true;
+      console.log("✅ MongoDB connected.");
+    }
+  } catch (err) {
+    console.error("❌ DB Connection failed:", err.message);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: "Database connection failed." }),
+    };
   }
 
-  const handler = serverless(server);
-  return handler(event, context);
+  return serverless(server)(event, context);
 };
+
+module.exports.handler = handler;
