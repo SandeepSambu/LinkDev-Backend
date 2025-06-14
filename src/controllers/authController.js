@@ -17,7 +17,11 @@ const registerUser = async (req, res) => {
     });
 
     const token = await user.getJWT();
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: true,
+      secure: true,
+    });
 
     await user.save();
 

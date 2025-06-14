@@ -11,7 +11,7 @@ const port = process.env.PORT || 5000;
 
 server.use(
   cors({
-    origin: ["https://link-dev-frontend.vercel.app/", "http://localhost:5173/"],
+    origin: ["https://link-dev-frontend.vercel.app", "http://localhost:5173"],
     credentials: true,
   })
 );
