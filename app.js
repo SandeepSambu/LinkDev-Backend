@@ -7,7 +7,7 @@ const authRouter = require("./src/routes/auth");
 const dashRouter = require("./src/routes/dashboard");
 require("dotenv").config();
 const path = require("path");
-const port = process.env.port || 5000;
+const port = process.env.PORT || 5000;
 
 server.use(
   cors({
