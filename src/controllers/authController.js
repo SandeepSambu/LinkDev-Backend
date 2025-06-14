@@ -100,7 +100,11 @@ const loginUser = async (req, res) => {
 
     const token = await user.getJWT();
 
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: true,
+      secure: true,
+    });
 
     res.status(200).json({
       message: "Logged in successfully",
