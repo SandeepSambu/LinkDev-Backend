@@ -7,10 +7,11 @@ const authRouter = require("./src/routes/auth");
 const dashRouter = require("./src/routes/dashboard");
 require("dotenv").config();
 const path = require("path");
+const port = process.env.port || 5000;
 
 server.use(
   cors({
-    origin: "https://link-dev-frontend.vercel.app/",
+    origin: ["https://link-dev-frontend.vercel.app/", "http://localhost:5173/"],
     credentials: true,
   })
 );
@@ -28,8 +29,8 @@ server.use("/", dashRouter);
 connectDB()
   .then(() => {
     console.log("Connected to Database successfully");
-    server.listen(5000, () => {
-      console.log("Listening on port 5000...");
+    server.listen(port, () => {
+      console.log(`Listening on port ${port}...`);
     });
   })
   .catch((err) => {
